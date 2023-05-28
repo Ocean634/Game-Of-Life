@@ -1,3 +1,4 @@
+coucou
 Bonjour Mr,
 Voici comme convenu notre travail sur le projet final 2023 en python. Nous avons, NOBILI Leandro et CLENET Jules, réalisé un jeu de la vie. Le projet contient 8 éléments : 5 images, ce fichier readme.txt et 2 scripts python. 
 
