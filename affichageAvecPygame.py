@@ -13,6 +13,7 @@
 import pygame, sys
 import time
 import copy
+import os
 
 # importation du moteur du jeu de la vie que nous avons créé
 # utilisation d'un alias pour simplifier le code
@@ -20,133 +21,28 @@ import projetJeuDeLaVie as jdlv
 
 import canon_planeur as cp
 
-mainClock = pygame.time.Clock()
-
-def blit_text(surface, text, pos, font, color=pygame.Color('black')):
-    words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
-    space = font.size(' ')[0]  # The width of a space.
-    max_width, max_height = surface.get_size()
-    x, y = pos
-    for line in words:
-        for word in line:
-            word_surface = font.render(word, 0, color)
-            word_width, word_height = word_surface.get_size()
-            if x + word_width >= max_width:
-                x = pos[0]  # Reset the x.
-                y += word_height  # Start on new row.
-            surface.blit(word_surface, (x, y))
-            x += word_width + space
-        x = pos[0]  # Reset the x.
-        y += word_height  # Start on new row.
-
-def welcome():
-    fullscreen=False
-    font = pygame.font.SysFont(None, 60)
-    font1 = pygame.font.SysFont(None, 30)
-    running = True
-    fond = pygame.image.load("background.jpg").convert()
-    play_button=pygame.image.load("pygame_run.png").convert_alpha()
-    welcome_title=font.render("Le Jeu de la vie", True, (0,0,0))
-    play_game_txt=font1.render("Voir la simulation :",True,(0,0,0))
-    welcome_txt_p1="Bienvenue dans la fascinante simulation du Jeu de la Vie ! Dans cet univers virtuel, vous avez le pouvoir de créer et de contrôler la vie elle-même. Vous êtes sur le point d'embarquer dans un voyage captivant où vous serez témoin de l'évolution, de la complexité et de la beauté de la vie, tout en explorant les principes fondamentaux qui la gouvernent."
-    welcome_txt_p2="Dans cette simulation, vous vous trouverez face à une grille constituée de cellules. Chaque cellule peut être dans l'un des deux états possibles : vivante ou morte. En interagissant avec ces cellules, vous découvrirez comment elles évoluent au fil du temps en fonction de règles simples mais fascinantes."
-    welcome_txt_p3="Votre rôle en tant qu'observateur et joueur est crucial. Vous pouvez créer de nouvelles cellules, les faire interagir et les voir se multiplier, se déplacer et même s'éteindre. La façon dont vous manipulez ces cellules et les règles que vous établissez auront un impact direct sur l'évolution de cet écosystème numérique."
-    welcome_txt_p4= "Mais ne vous méprenez pas, cette simulation est plus qu'un simple jeu. Elle porte en elle des principes complexes de dynamique, d'émergence et de systèmes complexes. Vous pourrez observer l'apparition de schémas étonnants, de structures stables et même de formes de vie émergentes à partir de règles de base."
-    welcome_txt_p5="Préparez-vous à être émerveillé par la puissance de cette simulation et à vous émerger dans un monde où la vie prend vie grâce à votre imagination et à vos décisions. Prêt à plonger dans l'univers du Jeu de la Vie ? Alors, préparez-vous à explorer, à expérimenter et à apprendre en jouant avec les fondements mêmes de la vie !"
-    play_button_vie=play_button.get_rect(topleft=(260,35))
-    screen.blit(fond, (0,0))
-    while running:
- 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-            if pygame.mouse.get_pressed()[0]:
-                x,y=pygame.mouse.get_pos()
-                if play_button_vie.collidepoint(x,y):
-                    run(120/nb_frame_sec, marge, world)
-        screen.blit(welcome_title, (450,20))
-        screen.blit(play_game_txt, (70,50))
-        screen.blit(play_button, (260,35))
-        blit_text(screen, welcome_txt_p1, (70,100), font1)
-        blit_text(screen, welcome_txt_p2, (70,200), font1)
-        blit_text(screen, welcome_txt_p3, (70,300), font1)
-        blit_text(screen, welcome_txt_p4, (70,400), font1)
-        blit_text(screen, welcome_txt_p5, (70,500), font1)
-        
-        pygame.display.update()
-        mainClock.tick(60)
-
-def options():
-    global world
-    font = pygame.font.SysFont(None, 60)
-    font1 = pygame.font.SysFont(None, 30)
-    running = True
-    fond = pygame.image.load("background.jpg").convert()
-    cannon_button = pygame.image.load("canon_button.png").convert_alpha()
-    moulin_button = pygame.image.load("moulin_img.png").convert_alpha()
-    retour_button = pygame.image.load("retour_img.png").convert_alpha()
-    canon_vie_button=cannon_button.get_rect(topleft=(70,350))
-    moulin_vie_button=moulin_button.get_rect(topleft=(70,250))
-    retour_vie_button=retour_button.get_rect(topleft=(70,60))
-    menu_title=font.render("Fonctionalités",True,(0,0,0))
-    canon_txt=font1.render("crée une figure qui lance des planeurs, cependant elle nécessite une grille avec une largeur supérieur 39",True,(0,0,0))
-    moulin_txt=font1.render("crée une figure clignotante plutôt curieuse, cependant elle nécessite une grille avec une largeur supérieur 9",True,(0,0,0))
-    screen.blit(fond, (0,0))
-    while running:
- 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-            if pygame.mouse.get_pressed()[0]:
-                # récupère les coordonnées de la souris
-                x, y = pygame.mouse.get_pos()
-                if retour_vie_button.collidepoint(x,y):
-                    running=False
-                if canon_vie_button.collidepoint(x,y):
-                    if len(world)>=36:
-                        world=jdlv.new_world(len(world),len(world))
-                        world=cp.canon_planeur(world)
-                        run(120/nb_frame_sec, marge, world)
-                if moulin_vie_button.collidepoint(x,y):
-                    if len(world)>=9:
-                        world=jdlv.new_world(len(world),len(world))
-                        world=cp.moulin_figure(world)
-                        run(120/nb_frame_sec, marge, world)
-        x,y=pygame.mouse.get_pos()
-        if moulin_vie_button.collidepoint(x,y):
-            screen.blit(moulin_txt, (130,265))
-        else:
-            screen.blit(fond, (0,0))
-        x,y=pygame.mouse.get_pos()
-        if canon_vie_button.collidepoint(x,y):
-            screen.blit(canon_txt, (130,365))
-        else:
-            screen.blit(fond, (0,0))
-
-        screen.blit(cannon_button, (70,350))
-        screen.blit(moulin_button, (70,250))
-        screen.blit(menu_title, (450,60))
-        screen.blit(retour_button, (70,60))
-        pygame.display.update()
-        mainClock.tick(60)
-
+def countdown(num_of_secs):
+    while num_of_secs:
+        m, s = divmod(num_of_secs, 60)
+        min_sec_format = '{:02d}:{:02d}'.format(m, s)
 
 
 def compte_nb_cellules(world):
-    compteur=0
+    """Retourne le nombre de cellules total dans la grille
+
+    Parameters:
+        world (list): matrice du jeu de la vie
+
+    Returns:
+        int: nombre de cellules dans la grille
+    """
+    compteur = 0
     for ligne in world:
         for case in ligne:
             if case:
-                compteur+=1
+                compteur += 1
     return compteur
+
 
 def dessiner_grille(nb_colonnes, marge):
     """Affiche le cadrillage du jeu sur l'écran
@@ -284,6 +180,7 @@ def next_generation(world, generation_affichee, former_generations, actual_gen, 
             generation_affichee -= 1
             # actualisation de la génration actuelle
             world = former_generations[actual_gen]
+        # lorsque la limite de la mémoire est atteinte, ne rien faire
     return world, generation_affichee, former_generations, actual_gen, derniere_gen
 monitor_size=[]
 def setup():
@@ -300,8 +197,7 @@ def setup():
     global clock
     pygame.init()
     # créé une fenêtre de 1200 pixels de large et 600 pixels de haut
-    monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
-    screen = pygame.display.set_mode((1200, 600), pygame.RESIZABLE)
+    screen = pygame.display.set_mode((1200, 600))
     pygame.display.set_caption("Programme du Jeu de la Vie")
     clock = pygame.time.Clock()
 
@@ -323,10 +219,12 @@ def run(nb_tick, marge, world, v2=False):
     global depart_gauche
     global intervalle
 
+    setup()
     # créé et initialise un nouvelle matrice
     """world = jdlv.start()
     world = jdlv.init_world(world)
-    setup()"""
+    nb_cellules_init=compte_nb_cellules(world)
+    setup()
     # nous commençons à la génration 1
     generation_affichee = 1
     # définit l'avancée des génrations sur pause
@@ -357,14 +255,14 @@ def run(nb_tick, marge, world, v2=False):
     rectangle_button_v2= v2_button.get_rect(topleft=(900,20))
     menu_vie_button=menu_button.get_rect(topleft=(1135,20))
     gen_affichage=font.render(f"Génération actuelle : {str(generation_affichee)}",True,(0,0,0))
-    
 
-    running = True
-    while running:
+
+    main_while = True
+    while main_while:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 # permet de quitter la fenêtre si la croix est cliquée
-                running = False
+                main_while = False
 
             if pygame.mouse.get_focused():
                 # récupère les coordonnées de la souris
@@ -448,4 +346,4 @@ world = jdlv.init_world(world)
 setup()
 marge = 20
 nb_frame_sec = 10
-welcome()
+run(120/nb_frame_sec, marge)
