@@ -13,6 +13,7 @@
 import pygame
 import time
 import copy
+import os
 
 # importation du moteur du jeu de la vie que nous avons créé
 # utilisation d'un alias pour simplifier le code
@@ -20,18 +21,29 @@ import projetJeuDeLaVie as jdlv
 
 import canon_planeur as cp
 
+
 def countdown(num_of_secs):
     while num_of_secs:
-        m, s = divmod(num_of_secs, 60)
+        m, s = num_of_secs//60, num_of_secs%60
         min_sec_format = '{:02d}:{:02d}'.format(m, s)
 
+
 def compte_nb_cellules(world):
-    compteur=0
+    """Retourne le nombre de cellules total dans la grille
+
+    Parameters:
+        world (list): matrice du jeu de la vie
+
+    Returns:
+        int: nombre de cellules dans la grille
+    """
+    compteur = 0
     for ligne in world:
         for case in ligne:
             if case:
-                compteur+=1
+                compteur += 1
     return compteur
+
 
 def dessiner_grille(nb_colonnes, marge):
     """Affiche le cadrillage du jeu sur l'écran
@@ -170,6 +182,7 @@ def next_generation(world, generation_affichee, former_generations, actual_gen, 
             generation_affichee -= 1
             # actualisation de la génration actuelle
             world = former_generations[actual_gen]
+        # lorsque la limite de la mémoire est atteinte, ne rien faire
     return world, generation_affichee, former_generations, actual_gen, derniere_gen
 
 def setup():
@@ -185,8 +198,10 @@ def setup():
     global screen
     global clock
     pygame.init()
-    # créé une fenêtre de 1200 pixels de large et 600 pixels de haut
-    screen = pygame.display.set_mode((1200, 600))
+    # positionne la fenêtre en haut à gauche de l'écran
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "0,31"
+    # créé une fenêtre de la taille de l'écran
+    screen = pygame.display.set_mode((pygame.display.get_desktop_sizes()[0][0], pygame.display.get_desktop_sizes()[0][1]-79), pygame.RESIZABLE)
     pygame.display.set_caption("Programme du Jeu de la Vie")
     clock = pygame.time.Clock()
 
@@ -208,11 +223,11 @@ def run(nb_tick, marge, v2=False):
     global depart_gauche
     global intervalle
 
+    setup()
     # créé et initialise un nouvelle matrice
     world = jdlv.start()
     world = jdlv.init_world(world)
     nb_cellules_init=compte_nb_cellules(world)
-    setup()
     # nous commençons à la génration 1
     generation_affichee = 1
     # définit l'avancée des génrations sur pause
@@ -243,14 +258,14 @@ def run(nb_tick, marge, v2=False):
     rectangle_button_v2= v2_button.get_rect(topleft=(70,150))
     canon_vie_button=cannon_button.get_rect(topleft=(160,150))
     gen_affichage=font.render(f"Génération actuelle : {str(generation_affichee)}",True,(0,0,0))
-    
 
-    running = True
-    while running:
+
+    main_while = True
+    while main_while:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 # permet de quitter la fenêtre si la croix est cliquée
-                running = False
+                main_while = False
 
             if pygame.mouse.get_focused():
                 # récupère les coordonnées de la souris
@@ -335,4 +350,5 @@ def run(nb_tick, marge, v2=False):
 
 marge = 20
 nb_frame_sec = 10
-run(120/nb_frame_sec, marge)
+nb_ticks_entre_chaque_image = 120/nb_frame_sec
+run(nb_ticks_entre_chaque_image, marge)

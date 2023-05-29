@@ -1,4 +1,3 @@
-coucou
 Bonjour Mr,
 Voici comme convenu notre travail sur le projet final 2023 en python. Nous avons, NOBILI Leandro et CLENET Jules, réalisé un jeu de la vie. Le projet contient 8 éléments : 5 images, ce fichier readme.txt et 2 scripts python. 
 
@@ -17,4 +16,3 @@ Enfin il est important de le préciser, nous avons bien entendu écrit l'intégr
 En espérant que vous ne nous en vroudrez pas si nous n'avons pas fait les graphismes avec le module turtle ;),
 
 CLENET Jules et NOBILI Leandro 104
-coucou
