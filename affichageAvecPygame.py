@@ -225,7 +225,7 @@ def run(nb_tick, marge, v2=False):
 
     setup()
     # créé et initialise un nouvelle matrice
-    world = jdlv.start(20)
+    world = jdlv.start()
     world = jdlv.init_world(world)
     nb_cellules_init=compte_nb_cellules(world)
     # nous commençons à la génration 1
