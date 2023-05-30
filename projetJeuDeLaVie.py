@@ -34,8 +34,9 @@ def init_world(world):
 
    """
     for i in range(len(world)):
-        for j in range(len(world[0])):
-            world[i][j]=bool(random.randint(0,1))
+        world[i][len(world)//2] = True
+        # for j in range(len(world[0])):
+            # world[i][j]=bool(random.randint(0,1))
     return world
 
 
@@ -173,9 +174,9 @@ def start(largeur=None):
             if largeur <= 0:
                 largeur = try_input("Le nombre que vous avez entré n'est pas strictement positif,\nveuillez entrer un nombre entre 1 et 100 : ")
                 continue
-            if largeur > 100:
-                largeur = try_input("Le nombre que vous avez entré est trop grand pour que l'affichage puisse se faire correctement.\nVeuillez entrer un nombre entre 1 et 100 :")
-                continue
+            #if largeur > 100:
+            #    largeur = try_input("Le nombre que vous avez entré est trop grand pour que l'affichage puisse se faire correctement.\nVeuillez entrer un nombre entre 1 et 100 :")
+            #    continue
             break
 
     world = new_world(largeur, largeur)

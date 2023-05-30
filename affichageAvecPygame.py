@@ -56,7 +56,7 @@ def welcome():
     play_button_vie=play_button.get_rect(topleft=(260,35))
     screen.blit(fond, (0,0))
     while running:
- 
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -76,7 +76,7 @@ def welcome():
         blit_text(screen, welcome_txt_p3, (70,300), font1)
         blit_text(screen, welcome_txt_p4, (70,400), font1)
         blit_text(screen, welcome_txt_p5, (70,500), font1)
-        
+
         pygame.display.update()
         mainClock.tick(60)
 
@@ -97,7 +97,7 @@ def options():
     moulin_txt=font1.render("crée une figure clignotante plutôt curieuse, cependant elle nécessite une grille avec une largeur supérieur 9",True,(0,0,0))
     screen.blit(fond, (0,0))
     while running:
- 
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -357,7 +357,7 @@ def run(nb_tick, marge, world, v2=False):
     rectangle_button_v2= v2_button.get_rect(topleft=(900,20))
     menu_vie_button=menu_button.get_rect(topleft=(1135,20))
     gen_affichage=font.render(f"Génération actuelle : {str(generation_affichee)}",True,(0,0,0))
-    
+
 
     running = True
     while running:
@@ -447,5 +447,5 @@ world = jdlv.start()
 world = jdlv.init_world(world)
 setup()
 marge = 20
-nb_frame_sec = 10
+nb_frame_sec = 120
 welcome()
