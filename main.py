@@ -20,7 +20,7 @@ import copy
 import projetJeuDeLaVie as jdlv
 
 # importation de la bibliothèque de situations initales
-import modelsLibrary as models
+import canon_planeur as models
 
 mainClock = pygame.time.Clock()
 
