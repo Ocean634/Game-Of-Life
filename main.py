@@ -10,7 +10,10 @@
 #-------------------------------------------------------------------------------
 
 # importation des modules innés
-import pygame
+try:
+    import pygame
+except ImportError:
+    raise ImportError("This app needs Pygame engine to work correctly. Please install it or launch projetJeuDeLaVie.py instead for a lighter version.")
 import sys
 import time
 import copy
